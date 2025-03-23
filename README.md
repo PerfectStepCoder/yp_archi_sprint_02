@@ -21,8 +21,9 @@ https://drive.google.com/file/d/1RqW3syzpTDPZi7Tsq7PYrvppCGi98jZi/view?usp=shari
 ## Задание 5. Service Discovery и балансировка с API Gateway
 Ссылка на схемы проектов 4
 https://drive.google.com/file/d/1RqW3syzpTDPZi7Tsq7PYrvppCGi98jZi/view?usp=sharing
-Вкладки: Gateway_04
+Вкладка: Gateway_04
 
 ## Задание 6. CDN
-
-
+Ссылка на схемы проектов 6
+https://drive.google.com/file/d/1RqW3syzpTDPZi7Tsq7PYrvppCGi98jZi/view?usp=sharing
+Вкладка: CDN_05
