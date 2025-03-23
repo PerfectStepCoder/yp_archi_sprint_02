@@ -27,3 +27,7 @@ https://drive.google.com/file/d/1RqW3syzpTDPZi7Tsq7PYrvppCGi98jZi/view?usp=shari
 Ссылка на схемы проектов 6
 https://drive.google.com/file/d/1RqW3syzpTDPZi7Tsq7PYrvppCGi98jZi/view?usp=sharing
 Вкладка: CDN_05
+
+## Внимание, если возникают ошибки при запуске проекта
+Ошибка может возникнуть когда происходит обращение к еще не готовому сервису, поэтому я ставил задержки.
+В виду этого я сделал поэтапную инициализацию см. описание

@@ -5,7 +5,7 @@ CASH_FILE = compose.cash.yaml
 
 ## start -> Запуск всех сервисов
 start:
-#docker network create mongo-cluster
+	docker network create mongo-cluster || true
 	docker-compose -f $(COMPOSE_FILE) up -d
 	docker-compose -f $(REPLICA_FILE) up -d
 	docker-compose -f $(CASH_FILE) up -d
@@ -22,8 +22,8 @@ status:
 
 ## init -> Инициализация
 init:
-	@echo "Инициализация Replica Set для mongodb-configs..."
-	@docker exec -i mongodb-configs mongosh --port 27017 --eval 'rs.initiate({ _id: "config_server", configsvr: true, members: [{ _id: 0, host: "mongodb-configs:27017" }] });' || echo "Ошибка инициализации или Replica Set уже инициализирован"
+	@echo "Инициализация mongodb-configs..."
+	@docker exec -i mongodb-configs mongosh --port 27017 --eval 'rs.initiate({ _id: "config_server", configsvr: true, members: [{ _id: 0, host: "mongodb-configs:27017" }] });' || echo "Ошибка инициализации уже инициализирован"
 	@sleep 10
 	@echo "Инициализации репликации по шардам..."
 	@docker-compose -f $(COMPOSE_FILE) -f $(REPLICA_FILE) exec -i shard1 mongosh --port 27018 --eval 'rs.initiate({ _id: "shard1_rs", members: [{ _id: 0, host: "shard1:27018", priority: 2 }, { _id: 1, host: "shard1-replica1:27031", priority: 1 }, { _id: 2, host: "shard1-replica2:27032", priority: 1 }]});' || echo "Ошибка при инициализации реплицировании"
@@ -38,6 +38,29 @@ init:
 	@echo "Настройка роутера завершена."
 	@echo "Инициализация завершена."
 
+init_mongodb-configs:
+	@echo "Инициализация mongodb-configs..."
+	@docker exec -i mongodb-configs mongosh --port 27017 --eval 'rs.initiate({ _id: "config_server", configsvr: true, members: [{ _id: 0, host: "mongodb-configs:27017" }] });' || echo "Ошибка инициализации уже инициализирован"
+
+init_replica_shard1:
+	@echo "Инициализации репликации по шардам... shard1"
+	@docker-compose -f $(COMPOSE_FILE) -f $(REPLICA_FILE) exec -i shard1 mongosh --port 27018 --eval 'rs.initiate({ _id: "shard1_rs", members: [{ _id: 0, host: "shard1:27018", priority: 2 }, { _id: 1, host: "shard1-replica1:27031", priority: 1 }, { _id: 2, host: "shard1-replica2:27032", priority: 1 }]});' || echo "Ошибка при инициализации реплицировании"
+	@echo "Настройка shard1 завершена."
+
+init_replica_shard2:
+	@echo "Инициализации репликации по шардам... shard2"
+	@docker-compose -f $(COMPOSE_FILE) -f $(REPLICA_FILE) exec -i shard2 mongosh --port 27019 --eval 'rs.initiate({ _id: "shard2_rs", members: [{ _id: 0, host: "shard2:27019", priority: 2 }, { _id: 1, host: "shard2-replica1:27041", priority: 1 }, { _id: 2, host: "shard2-replica2:27042", priority: 1 }]});' || echo "Ошибка при инициализации реплицировании"
+	@echo "Настройка shard2 завершена."
+
+init_mongos-router:
+	@echo "Настройка шардирования через mongos-router..."
+	@docker-compose -f $(COMPOSE_FILE) exec -i mongos-router mongosh --port 27020 --eval 'sh.addShard("shard1_rs/shard1:27018"); sh.addShard("shard2_rs/shard2:27019");' || echo "Ошибка настройки или шарды уже добавлены"
+	@echo "Настройка роутера завершена."
+
+init_db:
+	@echo "Создаем базу данных через mongos-router..."
+	@docker-compose -f $(COMPOSE_FILE) exec -i mongos-router mongosh --port 27020 --eval 'sh.enableSharding("somedb"); sh.shardCollection("somedb.helloDoc", { "name": "hashed" });' || echo "Ошибка создания базы данных"
+	@echo "Инициализация БД."
 
 ## add-mongodb -> Добавление новых данных
 add-mongodb:
