@@ -1,0 +1,95 @@
+
+services:
+  shard1-replica1:
+    image: mongo:latest
+    container_name: shard1-replica1
+    restart: always
+    ports:
+      - "27031:27031"
+    volumes:
+      - shard1-replica1-data:/data/db
+    command:
+      - "--replSet"
+      - "shard1_rs"
+      - "--bind_ip_all"
+      - "--port"
+      - "27031"
+    healthcheck:
+      test: ["CMD", "mongo", "--port", "27031", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      start_period: 10s
+    networks:
+      - mongo-cluster
+
+  shard1-replica2:
+    image: mongo:latest
+    container_name: shard1-replica2
+    restart: always
+    ports:
+      - "27032:27032"
+    volumes:
+      - shard1-replica2-data:/data/db
+    command:
+      - "--replSet"
+      - "shard1_rs"
+      - "--bind_ip_all"
+      - "--port"
+      - "27032"
+    healthcheck:
+      test: ["CMD", "mongo", "--port", "27032", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      start_period: 10s
+    networks:
+      - mongo-cluster
+
+  shard2-replica1:
+    image: mongo:latest
+    container_name: shard2-replica1
+    restart: always
+    ports:
+      - "27041:27041"
+    volumes:
+      - shard2-replica1-data:/data/db
+    command:
+      - "--replSet"
+      - "shard2_rs"
+      - "--bind_ip_all"
+      - "--port"
+      - "27041"
+    healthcheck:
+      test: ["CMD", "mongo", "--port", "27041", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      start_period: 10s
+    networks:
+      - mongo-cluster
+
+  shard2-replica2:
+    image: mongo:latest
+    container_name: shard2-replica2
+    restart: always
+    ports:
+      - "27042:27042"
+    volumes:
+      - shard2-replica2-data:/data/db
+    command:
+      - "--replSet"
+      - "shard2_rs"
+      - "--bind_ip_all"
+      - "--port"
+      - "27042"
+    healthcheck:
+      test: ["CMD", "mongo", "--port", "27042", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      start_period: 10s
+    networks:
+      - mongo-cluster
+
+volumes:
+  shard1-replica1-data:
+  shard1-replica2-data:
+  shard2-replica1-data:
+  shard2-replica2-data:
+
+networks:
+  mongo-cluster:
+    external: true

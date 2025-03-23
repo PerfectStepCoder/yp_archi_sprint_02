@@ -1,16 +1,28 @@
-# pymongo-api
+# Проект 2 спринта
 
-# Общая последовательность
-Работайте с утилитой make
-1) Запускайте все сервисы
-2) Инициализируйте Сервер Конфига, Шарды и Сервер Роутер от MongoDB
-3) Добавьте новые тестовые данные
-4) Проверьте статистику распределения документов по шардам
+## Задание 1. Планирование
+Ссылка на схемы проектов 1, 2, 3
+https://drive.google.com/file/d/1RqW3syzpTDPZi7Tsq7PYrvppCGi98jZi/view?usp=sharing
+Вкладки: Sharding_01, Replica_02, Cached_03
 
-Также доступен сервис: http://localhost:8090/docs
+## Задание 2. Шардирование
+Содержание в папке: mongo-sharding
 
-# Список доступных команд для заруска и управления проекта
-```shell
-make help 
-  [выбираете команду запуска из списка]
-```
+## Задание 3. Репликация
+Содержание в папке: mongo-sharding-repl
+Создание/удаление внешней сети:
+> docker network create mongo-cluster
+> docker network rm mongo-cluster       
+
+## Задание 4. Кеширование
+Содержание в папке: sharding-repl-cache
+Для работы с проектом используйте утилиту make
+
+## Задание 5. Service Discovery и балансировка с API Gateway
+Ссылка на схемы проектов 4
+https://drive.google.com/file/d/1RqW3syzpTDPZi7Tsq7PYrvppCGi98jZi/view?usp=sharing
+Вкладки: Gateway_04
+
+## Задание 6. CDN
+
+

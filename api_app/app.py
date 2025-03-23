@@ -142,7 +142,7 @@ async def collection_count(collection_name: str):
     response_model=UserCollection,
     response_model_by_alias=False,
 )
-@cache(expire=60 * 1)
+@cache(expire=60 * 10)
 async def list_users(collection_name: str):
     """
     List all of the user data in the database.
